@@ -15,14 +15,24 @@ def convert_to_anilist_format(shikimori_data):
         # Проверка на существование элементов
         series_animedb_id = anime.find('series_animedb_id').text if anime.find('series_animedb_id') is not None else '0'
         series_title = anime.find('series_title').text if anime.find('series_title') is not None else ''
-        series_type = anime.find('series_type').text if anime.find('series_type') is not None else ''
+        series_type = anime.find('series_type').text if anime.find('series_type') is not None else '0'
         series_episodes = anime.find('series_episodes').text if anime.find('series_episodes') is not None else '0'
         my_id = anime.find('my_id').text if anime.find('my_id') is not None else '0'
         my_watched_episodes = anime.find('my_watched_episodes').text if anime.find('my_watched_episodes') is not None else '0'
         my_score = anime.find('my_score').text if anime.find('my_score') is not None else '0'
-        my_status = anime.find('my_status').text if anime.find('my_status') is not None else ''
+        my_status = anime.find('my_status').text if anime.find('my_status') is not None else '0'
         my_times_watched = anime.find('my_times_watched').text if anime.find('my_times_watched') is not None else '0'
         my_comments = anime.find('my_comments').text if anime.find('my_comments') is not None else ''
+
+        # Преобразование статусов в соответствующий формат AniList
+        status_mapping = {
+            'watching': '1',
+            'completed': '2',
+            'on_hold': '3',
+            'dropped': '4',
+            'plan_to_watch': '6'
+        }
+        my_status = status_mapping.get(my_status, '6')  # Если статус не определен, по умолчанию 'plan_to_watch'
 
         anilist_entry = {
             'series_animedb_id': series_animedb_id,
